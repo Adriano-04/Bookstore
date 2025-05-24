@@ -4,14 +4,14 @@ from product.models.product import Product
 from product.serializers.category_serializer import CategorySerializer
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(required=True, many=True)
+    category = CategorySerializer(required=False, many=True)
 
     class Meta:
         model = Product
         fields = [
             'title',
-            'slug',
             'description',
             'active',
-            'category',
+            'price',
+            'category'
         ]
