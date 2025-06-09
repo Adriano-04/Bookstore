@@ -23,7 +23,6 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 DJANGO_ALLOWED_HOSTS_STR = os.environ.get("DJANGO_ALLOWED_HOSTS", "")
 
 if DJANGO_ALLOWED_HOSTS_STR:
-    # Se a variável estiver definida, divide por vírgulas e remove espaços extras
     ALLOWED_HOSTS = [host.strip() for host in DJANGO_ALLOWED_HOSTS_STR.split(',')]
 else:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
