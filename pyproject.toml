@@ -26,3 +26,11 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.group.dev.dependencies]
 pytest-django = "^4.11.1"
 
+[tool.poetry]
+name = "bookstore"
+version = "0.1.0"
+description = "API de uma livraria Django"
+authors = ["Adriano <meuemail@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "bookstore" }]
+requires-python = ">=3.12"
