@@ -1,7 +1,5 @@
-# Imagem base com Python 3.12 slim
 FROM python:3.12-slim AS python-base
 
-# Variáveis de ambiente
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=off \
@@ -23,27 +21,28 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Instala o Poetry 1.7.1
-RUN curl -sSL https://install.python-poetry.org | python3 - \
-    && ln -s /opt/poetry/bin/poetry /usr/local/bin/poetry
+# Instala o Poetry no diretório especificado
+RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=$POETRY_HOME python3 - \
+    && ln -s $POETRY_HOME/bin/poetry /usr/local/bin/poetry
 
-# Define o diretório de instalação dos pacotes
+# Instala o psycopg2 (PostgreSQL)
+RUN pip install psycopg2
+
+# Define diretório de trabalho para dependências
 WORKDIR $PYSETUP_PATH
 
-# Copia arquivos de dependência e instala
+# Copia arquivos de dependências
 COPY poetry.lock pyproject.toml ./
 
-# Instala dependências (inclusive os grupos, se definidos)
+# Instala as dependências principais
 RUN poetry install --no-root --only main
 
-# Define o diretório do app
+# Define o diretório da aplicação
 WORKDIR /app
 
-# Copia todo o código-fonte
+# Copia o restante do projeto
 COPY . /app/
 
-# Expõe a porta usada pelo Django (ajuste se necessário)
 EXPOSE 8000
 
-# Comando padrão
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
